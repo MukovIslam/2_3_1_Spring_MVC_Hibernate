@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Users</title>
+    <style>
+
+        .user-block {
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .user-block2 {
+            margin: 0 auto;
+            text-align: center;
+            margin-bottom: 10px;
+            transform: translate(210px, 0px);
+        }
+
+        .edit-box {
+            width: 120px;
+            border: 1px solid black;
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        .btn {
+            margin-top: 10px;
+        }
+
+        .empty-field {
+            width: 120px;
+            border: 1px solid black;
+            display: inline-block;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <th:block th:each="user : ${users}">
+        <div class="user-block">
+            <form th:action="@{/users/edit}" th:object="${user}" method="post">
+                <input class="edit-box" name="id" type="hidden" th:value="${user.id}"/>
+                <input class="edit-box" name="firstName" type="text" th:value="${user.firstName}"/>
+                <input class="edit-box" name="lastName" type="text" th:value="${user.lastName}"/>
+                <input class="edit-box" name="email" type="text" th:value="${user.email}"/>
+                <button class="btn" type="submit">Изменить</button>
+            </form>
+        </div>
+        <div class="user-block2">
+            <form th:action="@{/users/delete/(userId=${user.id})}" method="post">
+                <input type="hidden" name="userId" th:value="${user.id}"/>
+                <button class="btn" type="submit">Удалить</button>
+            </form>
+        </div>
+    </th:block>
+
+
+    <form th:method="POST" th:action="@{/users}" th:object="${newUser}">
+        <div class="user-block">
+            <input class="empty-field" type="hidden" th:field="*{id}" placeholder="ID"/>
+            <input class="empty-field" type="text" th:field="*{firstName}" placeholder="Имя"/>
+            <div th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">Error</div>
+            <input class="empty-field" type="text" th:field="*{lastName}" placeholder="Фамилия"/>
+            <div th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Error</div>
+            <input class="empty-field" type="text" th:field="*{email}" placeholder="Email"/>
+            <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Error</div>
+            <button class="btn" type="submit">Добавить</button>
+        </div>
+    </form>
+
+</div>
+</body>
+</html>
